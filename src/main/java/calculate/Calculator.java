@@ -1,18 +1,15 @@
 package calculate;
 
 import lombok.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
-import java.util.logging.Logger;
-
 
 @Getter
 @Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
-@NoArgsConstructor
 public class Calculator {
-    private static final Logger logger = Logger.getLogger( Calculator.class.getName() );
+    private static final Logger logger = LogManager.getLogger(Calculator.class);
 
     private static final int ADD = 1;
     private static final int SUBTRACT = 2;
@@ -26,35 +23,57 @@ public class Calculator {
         calculator.start();
     }
 
+    public Calculator() {
+        // Пустой конструктор для создания объекта через new Calculator()
+    }
+
     public void start() {
         Scanner scanner = new Scanner(System.in);
         int operation = getOperation(scanner);
         double firstNumber = getNumber(scanner, "первое");
         double secondNumber = getNumber(scanner, "второе");
         scanner.close();
-        String expression = String.valueOf(firstNumber + operation + secondNumber);
+        String expression = firstNumber + " " + getStringOperation(operation) + " " + secondNumber;
         try {
             double result = calculate(operation, firstNumber, secondNumber);
             printResult(result);
             logger.info(expression + " = " + result);
         } catch (IllegalArgumentException e) {
-            System.err.println("Ошибка: " + e.getMessage());
+            logger.error("Ошибка: " + e.getMessage());
         }
     }
 
-
     private int getOperation(Scanner scanner) {
-        System.out.println("Введите " + ADD + " для сложения, " +
-                SUBTRACT + " для вычитания, " +
-                MULTIPLY + " для умножения, " +
-                DIVIDE + " для деления:" +
-                EXPONENTIATION + " для возведения в степень:");
-        return scanner.nextInt();
+        while (true) {
+            System.out.println("Введите " + ADD + " для сложения, " +
+                    SUBTRACT + " для вычитания, " +
+                    MULTIPLY + " для умножения, " +
+                    DIVIDE + " для деления, " +
+                    EXPONENTIATION + " для возведения в степень:");
+            String input = scanner.nextLine();
+            try {
+                int operation = Integer.parseInt(input);
+                if (operation >= 1 && operation <= 5) {
+                    return operation;
+                } else {
+                    logger.error("Ошибка: число должно быть от 1 до 5. Пожалуйста, попробуйте снова.");
+                }
+            } catch (NumberFormatException e) {
+                logger.error("Ошибка: введено не число. Пожалуйста, введите цифру от 1 до 5.");
+            }
+        }
     }
 
     private double getNumber(Scanner scanner, String order) {
-        System.out.println("Введите " + order + " число:");
-        return scanner.nextDouble();
+        while (true) {
+            System.out.println("Введите " + order + " число:");
+            String input = scanner.nextLine();
+            try {
+                return Double.parseDouble(input);
+            } catch (NumberFormatException e) {
+                logger.error("Ошибка: введено не число. Пожалуйста, введите корректное число.");
+            }
+        }
     }
 
     private double calculate(int operation, double a, double b) {
@@ -73,12 +92,26 @@ public class Calculator {
             default:
                 throw new IllegalArgumentException("Неверная операция!");
         }
-
     }
 
     private void printResult(double result) {
         System.out.println("Результат: " + result);
     }
 
-
+    public String getStringOperation(int number) {
+        switch (number) {
+            case 1:
+                return "+";
+            case 2:
+                return "-";
+            case 3:
+                return "*";
+            case 4:
+                return "/";
+            case 5:
+                return "^";
+            default:
+                return "unknown operation";
+        }
+    }
 }

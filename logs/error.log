@@ -1,0 +1,6 @@
+19:13:10.523 [main] ERROR calculate.Calculator - Ошибка: Деление на ноль!
+19:21:18.711 [main] ERROR calculate.Calculator - Ошибка: Деление на ноль!
+19:26:16.546 [main] ERROR calculate.Calculator - Ошибка: Деление на ноль!
+19:26:53.450 [main] ERROR calculate.Calculator - Ошибка: введено не число. Пожалуйста, введите корректное число.
+19:27:02.479 [main] ERROR calculate.Calculator - Ошибка: введено не число. Пожалуйста, введите корректное число.
+19:27:05.015 [main] ERROR calculate.Calculator - Ошибка: введено не число. Пожалуйста, введите корректное число.
